@@ -1,0 +1,70 @@
+using System;
+using System.Threading.Tasks;
+
+namespace DotPacket.IO
+{
+    public class StreamReader
+    {
+        private IOStream _stream;
+        private uint _bufferSize;
+
+        public StreamReader(IOStream stream, uint bufferSize)
+        {
+            _stream = stream;
+            _bufferSize = bufferSize;
+        }
+
+        public async Task<byte[]> ReadBytes(uint count)
+        {
+            uint counter = 0;
+            byte[] result = new byte[count];
+            
+            while (counter < count)
+            {
+                counter += await _stream.WriteBytes(result, counter, _bufferSize);
+            }
+
+            return result;
+        }
+
+        public async Task<byte> ReadByte()
+        {
+            return (await ReadBytes(1))[0];
+        }
+
+        public async Task<bool> ReadBool()
+        {
+            return (await ReadByte()) == 1;
+        }
+
+        public async Task<short> ReadShort()
+        {
+            return BitConverter.ToInt16(await ReadBytes(2), 0);
+        }
+
+        public async Task<ushort> ReadUnsignedShort()
+        {
+            return BitConverter.ToUInt16(await ReadBytes(2), 0);
+        }
+
+        public async Task<int> ReadInt()
+        {
+            return BitConverter.ToInt32(await ReadBytes(4), 0);
+        }
+
+        public async Task<uint> ReadUnsignedInt()
+        {
+            return BitConverter.ToUInt32(await ReadBytes(4), 0);
+        }
+
+        public async Task<long> ReadLong()
+        {
+            return BitConverter.ToInt64(await ReadBytes(8), 0);
+        }
+
+        public async Task<ulong> ReadUnsignedLong()
+        {
+            return BitConverter.ToUInt64(await ReadBytes(8), 0);
+        }
+    }
+}
