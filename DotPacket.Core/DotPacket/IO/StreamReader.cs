@@ -66,5 +66,5 @@ namespace DotPacket.IO
         {
             return BitConverter.ToUInt64(await ReadBytes(8), 0);
         }
-    }
+     }
 }

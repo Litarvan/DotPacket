@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1E5F78CE-A2AD-4037-AC48-FB214B562232}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DotPacket</RootNamespace>
+    <AssemblyName>DotPacket</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\DotPacket.Core\DotPacket\IO\ByteArrayInputStream.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\IO\ByteArrayOutputStream.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\IO\IOStream.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\IO\SocketIOStream.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\Deserializer.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\Packet.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\ReflectionSerializing.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\Serializer.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\InputPacketBinding.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\InvalidRegistryOperationException.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\OutputPacketBinding.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\PacketBindindSide.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\PacketContainer.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\PacketBinding.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\PacketRegistry.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\UnknownPacketException.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\WrongPacketException.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Serialization\PacketDeserializer.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Serialization\PacketProcessor.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Serialization\PacketSerializer.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Serialization\ReflectionDeserializer.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Serialization\ReflectionSerializer.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\SocketPacketClient.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\SocketPacketServer.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\NetworkSide.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\NetworkConnection.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\IO\StreamReader.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\IO\StreamWriter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
