@@ -1,6 +1,6 @@
 namespace DotPacket
 {
-    public enum Side
+    public enum NetworkSide
     {
         Client,
         Server

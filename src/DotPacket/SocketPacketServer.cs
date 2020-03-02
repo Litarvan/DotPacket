@@ -43,7 +43,7 @@ namespace DotPacket
             }
             
             var client = await _socket.AcceptAsync();
-            return new NetworkConnection(Side.Server, new SocketIOStream(client), _bufferSize);
+            return new NetworkConnection(NetworkSide.Server, new SocketIOStream(client), _bufferSize);
         }
     }
 }

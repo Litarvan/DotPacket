@@ -6,7 +6,7 @@ namespace DotPacket
 {
     public class NetworkConnection
     {
-        private Side _side;
+        private NetworkSide _side;
         private IOStream _stream;
 
         private StreamReader _in;
@@ -14,7 +14,9 @@ namespace DotPacket
         
         private int _state;
 
-        public NetworkConnection(Side side, IOStream stream, uint bufferSize)
+        // TODO: Network connection
+        
+        public NetworkConnection(NetworkSide side, IOStream stream, uint bufferSize)
         {
             _side = side;
             _stream = stream;
@@ -25,6 +27,12 @@ namespace DotPacket
         
         public async Task ProcessNextPacket<P>()
         {
+            uint id = await _in.ReadUnsignedInt();
+            uint size = await _in.ReadUnsignedInt();
+
+            byte[] data = await _in.ReadBytes(size);
+            var dataStream = new ByteArrayInputStream(data);
+            
             
         }
     }

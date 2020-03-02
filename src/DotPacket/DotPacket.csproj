@@ -38,11 +38,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IO\ByteArrayInputStream.cs" />
+    <Compile Include="IO\ByteArrayOutputStream.cs" />
     <Compile Include="IO\IOStream.cs" />
     <Compile Include="IO\SocketIOStream.cs" />
+    <Compile Include="Registry\Attributes\Deserializer.cs" />
+    <Compile Include="Registry\Attributes\Packet.cs" />
+    <Compile Include="Registry\Attributes\ReflectionSerializing.cs" />
+    <Compile Include="Registry\Attributes\Serializer.cs" />
+    <Compile Include="Registry\InputPacketBinding.cs" />
+    <Compile Include="Registry\InvalidRegistryOperationException.cs" />
+    <Compile Include="Registry\OutputPacketBinding.cs" />
+    <Compile Include="Registry\PacketBindindSide.cs" />
+    <Compile Include="Registry\PacketContainer.cs" />
+    <Compile Include="Registry\PacketBinding.cs" />
+    <Compile Include="Registry\PacketRegistry.cs" />
+    <Compile Include="Registry\UnknownPacketException.cs" />
+    <Compile Include="Registry\WrongPacketException.cs" />
+    <Compile Include="Serialization\PacketDeserializer.cs" />
+    <Compile Include="Serialization\PacketProcessor.cs" />
+    <Compile Include="Serialization\PacketSerializer.cs" />
+    <Compile Include="Serialization\ReflectionDeserializer.cs" />
+    <Compile Include="Serialization\ReflectionSerializer.cs" />
     <Compile Include="SocketPacketClient.cs" />
     <Compile Include="SocketPacketServer.cs" />
-    <Compile Include="Side.cs" />
+    <Compile Include="NetworkSide.cs" />
     <Compile Include="NetworkConnection.cs" />
     <Compile Include="IO\StreamReader.cs" />
     <Compile Include="IO\StreamWriter.cs" />
