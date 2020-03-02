@@ -7,18 +7,16 @@ namespace DotPacket.Registry
 {
     public class InputPacketBinding : PacketBinding
     {
-        private PacketDeserializer _deserializer;
-
-        public PacketDeserializer Deserializer => _deserializer;
+        public PacketDeserializer Deserializer { get; }
 
         public InputPacketBinding(Type packet, PacketDeserializer deserializer) : base(packet)
         {
-            _deserializer = deserializer;
+            Deserializer = deserializer;
         }
 
         public async Task ReceiveAndHandle(byte[] data)
         {
-            await Handler(await _deserializer.Deserialize(data));
+            await Handler(await Deserializer.Deserialize(data));
         }
     }
 }

@@ -7,8 +7,8 @@ namespace DotPacket.Registry
 {
     public class PacketRegistry
     {
-        private Dictionary<int, PacketContainer> _states;
-        private List<(Packet, Type)> _packets;
+        private readonly Dictionary<int, PacketContainer> _states;
+        private readonly List<(Packet, Type)> _packets;
 
         public PacketRegistry()
         {
@@ -46,7 +46,7 @@ namespace DotPacket.Registry
             }
         }
 
-        public Task Input(int state, uint id, byte[] data)
+        public Task Input(int state, byte id, byte[] data)
         {
             var container = _states[state];
             if (container == null)
@@ -64,7 +64,7 @@ namespace DotPacket.Registry
             }
         }
 
-        public Task<byte[]> Output(int state, uint id, object packet)
+        public Task<byte[]> Output(int state, byte id, object packet)
         {
             var container = _states[state];
             if (container == null)

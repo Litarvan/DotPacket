@@ -5,7 +5,7 @@ namespace DotPacket.IO
 {
     public class ByteArrayInputStream : IOStream
     {
-        private byte[] _bytes;
+        private readonly byte[] _bytes;
 
         public ByteArrayInputStream(byte[] bytes)
         {

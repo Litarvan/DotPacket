@@ -5,19 +5,15 @@ namespace DotPacket.Registry.Attributes
     [AttributeUsage(AttributeTargets.Class)]
     public class Packet : Attribute
     {
-        private uint _id;
-        private int _state;
-        private NetworkSide _bound;
+        public byte Id { get; }
+        public int State { get; }
+        public NetworkSide Bound { get; }
 
-        public uint Id => _id;
-        public int State => _state;
-        public NetworkSide Bound => _bound;
-
-        public Packet(uint id, int state, NetworkSide bound)
+        public Packet(byte id, int state, NetworkSide bound)
         {
-            _id = id;
-            _state = state;
-            _bound = bound;
+            Id = id;
+            State = state;
+            Bound = bound;
         }
     }
 }

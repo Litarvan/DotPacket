@@ -9,8 +9,8 @@ namespace DotPacket.Registry
 {
     public class PacketContainer
     {
-        private Dictionary<uint, InputPacketBinding> _inputPackets;
-        private Dictionary<uint, OutputPacketBinding> _outputPackets;
+        private readonly Dictionary<uint, InputPacketBinding> _inputPackets;
+        private readonly Dictionary<uint, OutputPacketBinding> _outputPackets;
 
         public PacketContainer()
         {
@@ -18,10 +18,10 @@ namespace DotPacket.Registry
             _outputPackets = new Dictionary<uint, OutputPacketBinding>();
         }
 
-        public void Register(uint id, PacketBindindSide side, Type packet)
+        public void Register(byte id, PacketBindindSide side, Type packet)
         {
             var attrs = packet.GetCustomAttributes(typeof(ReflectionSerializing), true);
-            bool useReflection = attrs.Length != 0;
+            var useReflection = attrs.Length != 0;
 
             switch (side)
             {
@@ -36,7 +36,7 @@ namespace DotPacket.Registry
             }
         }
 
-        public Task Input(uint id, byte[] data)
+        public Task Input(byte id, byte[] data)
         {
             var binding = _inputPackets[id];
             if (binding == null)
@@ -47,7 +47,7 @@ namespace DotPacket.Registry
             return binding.ReceiveAndHandle(data);
         }
 
-        public Task<byte[]> Output(uint id, object packet)
+        public Task<byte[]> Output(byte id, object packet)
         {
             var binding = _outputPackets[id];
             if (binding == null)
@@ -63,7 +63,7 @@ namespace DotPacket.Registry
             return binding.Serialize(packet);
         }
 
-        private P GetProcessor<P>(Type packet, Type attributeType, bool useReflection)
+        private static P GetProcessor<P>(Type packet, Type attributeType, bool useReflection)
             where P: PacketProcessor
         {
             PacketProcessor processor = useReflection ? new ReflectionDeserializer(packet) : null; 

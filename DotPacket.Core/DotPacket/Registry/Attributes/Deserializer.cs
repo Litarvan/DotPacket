@@ -5,13 +5,11 @@ namespace DotPacket.Registry.Attributes
     [AttributeUsage(AttributeTargets.Class)]
     public class Deserializer : Attribute
     {
-        private Type _deserializerClass;
-
-        public Type DeserializerClass => _deserializerClass;
+        public Type DeserializerClass { get; }
 
         public Deserializer(Type deserializerClass)
         {
-            _deserializerClass = deserializerClass;
+            DeserializerClass = deserializerClass;
         }
     }
 }

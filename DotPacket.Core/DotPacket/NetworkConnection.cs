@@ -6,11 +6,11 @@ namespace DotPacket
 {
     public class NetworkConnection
     {
-        private NetworkSide _side;
-        private IOStream _stream;
+        private readonly NetworkSide _side;
+        private readonly IOStream _stream;
 
-        private StreamReader _in;
-        private StreamWriter _out;
+        private readonly StreamReader _in;
+        private readonly StreamWriter _out;
         
         private int _state;
 
@@ -27,10 +27,10 @@ namespace DotPacket
         
         public async Task ProcessNextPacket<P>()
         {
-            uint id = await _in.ReadUnsignedInt();
-            uint size = await _in.ReadUnsignedInt();
+            var id = await _in.ReadByte();
+            var size = await _in.ReadUnsignedShort();
 
-            byte[] data = await _in.ReadBytes(size);
+            var data = await _in.ReadBytes(size);
             var dataStream = new ByteArrayInputStream(data);
             
             

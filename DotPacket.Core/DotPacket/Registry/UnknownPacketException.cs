@@ -4,23 +4,20 @@ namespace DotPacket.Registry
 {
     public class UnknownPacketException : Exception
     {
-        private uint _id;
-        private int _state;
+        public byte Id { get; }
+        public int State { get; }
 
-        public uint Id => _id;
-        public int State => _state;
-
-        public UnknownPacketException(uint id) : base($"An unknown packet with ID '{id}' was received")
+        public UnknownPacketException(byte id) : base($"An unknown packet with ID '{id}' was received")
         {
-            _id = id;
+            Id = id;
         }
 
-        public UnknownPacketException(int state, uint id) : base(
+        public UnknownPacketException(int state, byte id) : base(
             $"An unknown packet with ID '{id}' was received during state '{state}'"
         )
         {
-            _id = id;
-            _state = state;
+            Id = id;
+            State = state;
         }
     }
 }

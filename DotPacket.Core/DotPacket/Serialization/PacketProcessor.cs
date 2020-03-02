@@ -4,13 +4,11 @@ namespace DotPacket.Serialization
 {
     public abstract class PacketProcessor
     {
-        private Type _type;
-
-        public Type Type => _type;
+        public Type Type { get; }
 
         protected PacketProcessor(Type type)
         {
-            _type = type;
+            Type = type;
         }
         
         public virtual void Prepare()

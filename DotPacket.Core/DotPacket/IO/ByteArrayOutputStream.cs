@@ -6,7 +6,7 @@ namespace DotPacket.IO
 {
     public class ByteArrayOutputStream : IOStream
     {
-        private List<byte> _bytes;
+        private readonly List<byte> _bytes;
         
         public ByteArrayOutputStream()
         {

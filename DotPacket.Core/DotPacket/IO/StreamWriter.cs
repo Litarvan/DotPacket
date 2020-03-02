@@ -5,8 +5,8 @@ namespace DotPacket.IO
 {
     public class StreamWriter
     {
-        private IOStream _stream;
-        private uint _bufferSize;
+        private readonly IOStream _stream;
+        private readonly uint _bufferSize;
 
         public StreamWriter(IOStream socket, uint bufferSize)
         {

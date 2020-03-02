@@ -5,8 +5,8 @@ namespace DotPacket.IO
 {
     public class StreamReader
     {
-        private IOStream _stream;
-        private uint _bufferSize;
+        private readonly IOStream _stream;
+        private readonly uint _bufferSize;
 
         public StreamReader(IOStream stream, uint bufferSize)
         {
@@ -17,7 +17,7 @@ namespace DotPacket.IO
         public async Task<byte[]> ReadBytes(uint count)
         {
             uint counter = 0;
-            byte[] result = new byte[count];
+            var result = new byte[count];
             
             while (counter < count)
             {

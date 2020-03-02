@@ -8,11 +8,11 @@ namespace DotPacket
 {
     public class SocketPacketServer
     {
-        public static readonly uint DefaultBufferSize = 4096;
-        
-        private IPEndPoint _endPoint;
-        private Socket _socket;
-        private uint _bufferSize;
+        public const uint DefaultBufferSize = 4096;
+
+        private readonly IPEndPoint _endPoint;
+        private readonly Socket _socket;
+        private readonly uint _bufferSize;
 
         private bool _isBound;
         
