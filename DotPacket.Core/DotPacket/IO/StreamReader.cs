@@ -66,5 +66,33 @@ namespace DotPacket.IO
         {
             return BitConverter.ToUInt64(await ReadBytes(8), 0);
         }
+
+        public async Task<float> ReadFloat()
+        {
+            return BitConverter.ToSingle(await ReadBytes(4), 0);
+        }
+
+        public async Task<double> ReadDouble()
+        {
+            return BitConverter.ToDouble(await ReadBytes(8), 0);
+        }
+
+        public async Task<char> ReadChar()
+        {
+            return BitConverter.ToChar(await ReadBytes(2), 0);
+        }
+
+        public async Task<string> ReadString()
+        {
+            var size = await ReadUnsignedShort();
+            var result = "";
+            
+            for (var i = 0; i < size; i++)
+            {
+                result += await ReadChar();
+            }
+
+            return result;
+        }
      }
 }

@@ -8,15 +8,21 @@ namespace DotPacket.Registry
     public class InputPacketBinding : PacketBinding
     {
         public PacketDeserializer Deserializer { get; }
+        public Handler Handler { get; set; }
 
-        public InputPacketBinding(Type packet, PacketDeserializer deserializer) : base(packet)
+        public InputPacketBinding(byte id, Type packet, PacketDeserializer deserializer) : base(id, packet)
         {
             Deserializer = deserializer;
         }
 
-        public async Task ReceiveAndHandle(byte[] data)
+        public async Task ReceiveAndHandle(ConnectionContext context, byte[] data)
         {
-            await Handler(await Deserializer.Deserialize(data));
+            if (Handler != null)
+            {
+                await Handler(context, await Deserializer.Deserialize(data));
+            }
         }
     }
+    
+    public delegate Task Handler(ConnectionContext context, object packet);
 }

@@ -1,15 +1,15 @@
 using System;
-using System.Threading.Tasks;
 
 namespace DotPacket.Registry
 {
     public abstract class PacketBinding
     {
+        public byte Id { get; }
         public Type Packet { get; }
-        public Func<Object, Task> Handler { get; set; }
 
-        protected PacketBinding(Type packet)
+        protected PacketBinding(byte id, Type packet)
         {
+            Id = id;
             Packet = packet;
         }
     }

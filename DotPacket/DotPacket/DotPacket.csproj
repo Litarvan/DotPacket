@@ -46,6 +46,7 @@
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\Packet.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\ReflectionSerializing.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\Serializer.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\Handler.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\InputPacketBinding.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\InvalidRegistryOperationException.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\OutputPacketBinding.cs" />
@@ -54,7 +55,6 @@
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\PacketBinding.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\PacketRegistry.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\UnknownPacketException.cs" />
-    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\WrongPacketException.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Serialization\PacketDeserializer.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Serialization\PacketProcessor.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Serialization\PacketSerializer.cs" />
@@ -64,6 +64,8 @@
     <Compile Include="..\..\DotPacket.Core\DotPacket\SocketPacketServer.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\NetworkSide.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\NetworkConnection.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\NetContext.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\DotPacket.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\IO\StreamReader.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\IO\StreamWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

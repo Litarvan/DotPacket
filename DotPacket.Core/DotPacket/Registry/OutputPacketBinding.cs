@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+
 using DotPacket.Serialization;
 
 namespace DotPacket.Registry
@@ -8,7 +9,7 @@ namespace DotPacket.Registry
     {
         public PacketSerializer Serializer { get; }
 
-        public OutputPacketBinding(Type packet, PacketSerializer serializer) : base(packet)
+        public OutputPacketBinding(byte id, Type packet, PacketSerializer serializer) : base(id, packet)
         {
             Serializer = serializer;
         }

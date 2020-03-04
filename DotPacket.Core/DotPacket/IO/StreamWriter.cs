@@ -8,9 +8,9 @@ namespace DotPacket.IO
         private readonly IOStream _stream;
         private readonly uint _bufferSize;
 
-        public StreamWriter(IOStream socket, uint bufferSize)
+        public StreamWriter(IOStream stream, uint bufferSize)
         {
-            _stream = socket;
+            _stream = stream;
             _bufferSize = bufferSize;
         }
         
@@ -62,6 +62,31 @@ namespace DotPacket.IO
         public Task WriteUnsignedLong(ulong l)
         {
             return WriteBytes(BitConverter.GetBytes(l));
+        }
+
+        public Task WriteFloat(float f)
+        {
+            return WriteBytes(BitConverter.GetBytes(f));
+        }
+
+        public Task WriteDouble(double d)
+        {
+            return WriteBytes(BitConverter.GetBytes(d));
+        }
+
+        public Task WriteChar(char c)
+        {
+            return WriteBytes(BitConverter.GetBytes(c));
+        }
+
+        public async Task WriteString(string str)
+        {
+            await WriteUnsignedShort((ushort) str.Length);
+            
+            foreach (var c in str)
+            {
+                await WriteChar(c);
+            }
         }
     }
 }

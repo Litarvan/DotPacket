@@ -10,12 +10,14 @@ namespace DotPacket.Registry
     public class PacketContainer
     {
         private readonly Dictionary<uint, InputPacketBinding> _inputPackets;
-        private readonly Dictionary<uint, OutputPacketBinding> _outputPackets;
+        private readonly Dictionary<Type, OutputPacketBinding> _outputPackets;
 
+        // TODO: Method (de)serializers
+        
         public PacketContainer()
         {
             _inputPackets = new Dictionary<uint, InputPacketBinding>();
-            _outputPackets = new Dictionary<uint, OutputPacketBinding>();
+            _outputPackets = new Dictionary<Type, OutputPacketBinding>();
         }
 
         public void Register(byte id, PacketBindindSide side, Type packet)
@@ -27,16 +29,30 @@ namespace DotPacket.Registry
             {
                 case PacketBindindSide.Input:
                     var deserializer = GetProcessor<PacketDeserializer>(packet, typeof(Deserializer), useReflection);
-                    _inputPackets[id] = new InputPacketBinding(packet, deserializer);
+                    _inputPackets[id] = new InputPacketBinding(id, packet, deserializer);
                     break;
                 case PacketBindindSide.Output:
                     var serializer = GetProcessor<PacketSerializer>(packet, typeof(Serializer), useReflection);
-                    _outputPackets[id] = new OutputPacketBinding(packet, serializer);
+                    _outputPackets[packet] = new OutputPacketBinding(id, packet, serializer);
                     break;
             }
         }
 
-        public Task Input(byte id, byte[] data)
+        public bool SetHandler(Type packet, Handler handler)
+        {
+            foreach (var (_, binding) in _inputPackets)
+            {
+                if (binding.Packet == packet)
+                {
+                    binding.Handler = handler;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public Task Input(ConnectionContext context, byte id, byte[] data)
         {
             var binding = _inputPackets[id];
             if (binding == null)
@@ -44,23 +60,18 @@ namespace DotPacket.Registry
                 throw new UnknownPacketException(id);
             }
             
-            return binding.ReceiveAndHandle(data);
+            return binding.ReceiveAndHandle(context, data);
         }
 
-        public Task<byte[]> Output(byte id, object packet)
+        public (byte, Task<byte[]>) Output(object packet)
         {
-            var binding = _outputPackets[id];
+            var binding = _outputPackets[packet.GetType()];
             if (binding == null)
             {
-                throw new UnknownPacketException(id);
+                throw new UnknownPacketException(packet.GetType());
             }
 
-            if (packet.GetType() != binding.Packet)
-            {
-                throw new WrongPacketException(id, packet.GetType());
-            }
-
-            return binding.Serialize(packet);
+            return (binding.Id, binding.Serialize(packet));
         }
 
         private static P GetProcessor<P>(Type packet, Type attributeType, bool useReflection)
