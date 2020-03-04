@@ -63,7 +63,7 @@ namespace DotPacket.Registry
 
                 if (
                     pars.Length != 2
-                        || !pars[0].ParameterType.IsAssignableFrom(typeof(ConnectionContext))
+                        || !typeof(ConnectionContext).IsAssignableFrom(pars[0].ParameterType)
                         || !pars[1].ParameterType.IsAssignableFrom(packet)
                 )
                 {
