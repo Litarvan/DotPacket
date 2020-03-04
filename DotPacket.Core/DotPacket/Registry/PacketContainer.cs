@@ -54,31 +54,34 @@ namespace DotPacket.Registry
 
         public Task Input(ConnectionContext context, byte id, byte[] data)
         {
-            var binding = _inputPackets[id];
-            if (binding == null)
+            if (!_inputPackets.ContainsKey(id))
             {
                 throw new UnknownPacketException(id);
             }
-            
-            return binding.ReceiveAndHandle(context, data);
+
+            return _inputPackets[id].ReceiveAndHandle(context, data);
         }
 
         public (byte, Task<byte[]>) Output(object packet)
         {
-            var binding = _outputPackets[packet.GetType()];
-            if (binding == null)
+            if (!_outputPackets.ContainsKey(packet.GetType()))
             {
                 throw new UnknownPacketException(packet.GetType());
             }
 
+            var binding = _outputPackets[packet.GetType()];
             return (binding.Id, binding.Serialize(packet));
         }
 
         private static P GetProcessor<P>(Type packet, Type attributeType, bool useReflection)
             where P: PacketProcessor
         {
-            PacketProcessor processor = useReflection ? new ReflectionDeserializer(packet) : null; 
             var attrs = packet.GetCustomAttributes(attributeType, true);
+            var processor = useReflection
+                ? attributeType == typeof(Serializer)
+                    ? (PacketProcessor) new ReflectionSerializer(packet)
+                    : new ReflectionDeserializer(packet)
+                : null;
                     
             if (attrs.Length > 0)
             {
@@ -105,7 +108,7 @@ namespace DotPacket.Registry
                     );
                 }
 
-                processor = (PacketDeserializer) cons.Invoke(new object[]{packet});
+                processor = (P) cons.Invoke(new object[]{packet});
             }
             else if (processor == null)
             {

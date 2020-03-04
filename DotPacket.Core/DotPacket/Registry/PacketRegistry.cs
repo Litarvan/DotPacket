@@ -44,7 +44,7 @@ namespace DotPacket.Registry
             }
             
             throw new InvalidRegistryOperationException(
-                $"Can't find input-bound packet of type '{packet.FullName}'"
+                $"Can't find input-bound packet of type '{packet.FullName}', did you call SetupFor ?"
             );
         }
 
@@ -63,8 +63,8 @@ namespace DotPacket.Registry
 
                 if (
                     pars.Length != 2
-                        || !pars[0].ParameterType.IsSubclassOf(typeof(ConnectionContext))
-                        || !pars[0].ParameterType.IsAssignableFrom(packet)
+                        || !pars[0].ParameterType.IsAssignableFrom(typeof(ConnectionContext))
+                        || !pars[1].ParameterType.IsAssignableFrom(packet)
                 )
                 {
                     throw new InvalidRegistryOperationException(
@@ -87,10 +87,19 @@ namespace DotPacket.Registry
 
         public void SetupFor(NetworkSide side)
         {
+            if (_states.Count != 0)
+            {
+                return;
+            }
+            
             foreach (var (packet, type) in _packets)
             {
-                var container = _states[packet.State];
-                if (container == null)
+                PacketContainer container;
+                if (_states.ContainsKey(packet.State))
+                {
+                    container = _states[packet.State];
+                }
+                else
                 {
                     container = _states[packet.State] = new PacketContainer();
                 }
@@ -101,15 +110,14 @@ namespace DotPacket.Registry
 
         public Task Input(ConnectionContext context, byte id, byte[] data)
         {
-            var container = _states[context.State];
-            if (container == null)
+            if (!_states.ContainsKey(context.State))
             {
                 throw new UnknownPacketException(context.State, id);
             }
 
             try
             {
-                return container.Input(context, id, data);
+                return _states[context.State].Input(context, id, data);
             }
             catch (UnknownPacketException e)
             {
@@ -119,15 +127,14 @@ namespace DotPacket.Registry
 
         public (byte, Task<byte[]>) Output(int state, object packet)
         {
-            var container = _states[state];
-            if (container == null)
+            if (!_states.ContainsKey(state))
             {
                 throw new UnknownPacketException(state);
             }
-
+            
             try
             {
-                return container.Output(packet);
+                return _states[state].Output(packet);
             }
             catch (UnknownPacketException e)
             {
