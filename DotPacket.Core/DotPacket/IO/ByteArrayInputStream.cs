@@ -32,5 +32,9 @@ namespace DotPacket.IO
         {
             return Task.FromResult((uint) 0);
         }
+
+        public void Close()
+        {
+        }
     }
 }

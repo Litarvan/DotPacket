@@ -6,5 +6,7 @@ namespace DotPacket.IO
     {
         Task<uint> ReadBytes(byte[] bytes, uint offset, uint count);
         Task<uint> WriteBytes(byte[] bytes, uint offset, uint count);
+
+        void Close();
     }
 }

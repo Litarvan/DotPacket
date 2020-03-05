@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using DotPacket.IO;
@@ -17,7 +18,10 @@ namespace DotPacket
         private readonly ManualResetEvent _readLock;
         private readonly ManualResetEvent _writeLock;
 
+        private bool _isRunning;
+
         public ConnectionContext Context { get; }
+        public event OnConnectionClose OnClose;
         
         public NetworkConnection(
             PacketRegistry registry,
@@ -64,5 +68,46 @@ namespace DotPacket
             
             _writeLock.Set();
         }
+
+        public async Task ProcessInBackground()
+        {
+            if (_isRunning)
+            {
+                return;
+            }
+            
+            _isRunning = true;
+            
+            while (_isRunning)
+            {
+                try
+                {
+                    await ProcessNextPacket();
+                }
+                catch (Exception e)
+                {
+                    if (OnClose != null)
+                    {
+                        OnClose(Context, e is SocketClosedException ? null : e);
+                    }
+                    
+                    break;
+                }
+            }
+            
+            _isRunning = false;
+        }
+
+        public void Close()
+        {
+            _isRunning = false;
+            
+            if (OnClose != null)
+            {
+                OnClose(Context, null);
+            }
+        }
     }
+
+    public delegate void OnConnectionClose(ConnectionContext context, Exception error); 
 }

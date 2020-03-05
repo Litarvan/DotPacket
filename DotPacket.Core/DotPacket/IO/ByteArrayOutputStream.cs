@@ -35,5 +35,9 @@ namespace DotPacket.IO
         {
             return _bytes.ToArray();
         }
+
+        public void Close()
+        {
+        }
     }
 }
