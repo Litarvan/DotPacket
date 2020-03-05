@@ -21,7 +21,7 @@ namespace DotPacket.IO
             
             while (counter < count)
             {
-                counter += await _stream.WriteBytes(result, counter, _bufferSize);
+                counter += await _stream.ReadBytes(result, counter, Math.Min(count - counter, _bufferSize));
             }
 
             return result;

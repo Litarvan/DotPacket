@@ -10,6 +10,7 @@ namespace DotPacket.Serialization
     public class ReflectionSerializer : PacketSerializer
     {
         private static readonly Se Byte = (stream, obj) => stream.WriteByte((byte) obj);
+        private static readonly Se Boolean = (stream, obj) => stream.WriteBool((bool) obj);
         private static readonly Se Short = (stream, obj) => stream.WriteShort((short) obj);
         private static readonly Se UShort = (stream, obj) => stream.WriteUnsignedShort((ushort) obj);
         private static readonly Se Int = (stream, obj) => stream.WriteInt((int) obj);
@@ -32,7 +33,7 @@ namespace DotPacket.Serialization
         {
             base.Prepare();
             
-            var fields = Type.GetFields();
+            var fields = Type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (var field in fields)
             {
                 Se se = null;
@@ -40,6 +41,7 @@ namespace DotPacket.Serialization
                 // TODO: Arrays/Lists
 
                 if (field.FieldType == typeof(byte)) se = Byte;
+                else if (field.FieldType == typeof(bool)) se = Boolean;
                 else if (field.FieldType == typeof(short)) se = Short;
                 else if (field.FieldType == typeof(ushort)) se = UShort;
                 else if (field.FieldType == typeof(int)) se = Int;

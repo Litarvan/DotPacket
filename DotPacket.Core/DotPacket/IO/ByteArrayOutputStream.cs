@@ -7,27 +7,28 @@ namespace DotPacket.IO
     public class ByteArrayOutputStream : IOStream
     {
         private readonly List<byte> _bytes;
-        
+        // TODO: Utiliser Array.Copy ?
+ 
         public ByteArrayOutputStream()
         {
             _bytes = new List<byte>();
         }
         
-        public async Task<uint> ReadBytes(byte[] bytes, uint offset, uint count)
+        public Task<uint> ReadBytes(byte[] bytes, uint offset, uint count)
         {
-            return 0;
+            return Task.FromResult((uint) 0);
         }
 
-        public async Task<uint> WriteBytes(byte[] bytes, uint offset, uint count)
+        public Task<uint> WriteBytes(byte[] bytes, uint offset, uint count)
         {
-            uint toWrite = Math.Min((uint) bytes.Length - offset, count);
+            var toWrite = Math.Min((uint) bytes.Length - offset, count);
             
-            for (uint i = offset; i < offset + toWrite; i++)
+            for (var i = offset; i < offset + toWrite; i++)
             {
                 _bytes.Add(bytes[i]);
             }
 
-            return toWrite;
+            return Task.FromResult(toWrite);
         }
 
         public byte[] GetBytes()

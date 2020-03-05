@@ -14,7 +14,7 @@ namespace DotPacket.Registry
         }
 
         public UnknownPacketException(int state, byte id) : base(
-            $"An unknown packet with ID '{id}' was received during state '{state}'"
+            $"An unknown packet with ID '{id}' was received/tried to be sent during state '{state}'"
         )
         {
             Id = id;

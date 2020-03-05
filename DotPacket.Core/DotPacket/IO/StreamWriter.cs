@@ -20,7 +20,7 @@ namespace DotPacket.IO
             
             while (counter < bytes.Length)
             {
-                counter += await _stream.WriteBytes(bytes, counter, _bufferSize);
+                counter += await _stream.WriteBytes(bytes, counter, Math.Min((uint) bytes.Length - counter, _bufferSize));
             }
         }
 

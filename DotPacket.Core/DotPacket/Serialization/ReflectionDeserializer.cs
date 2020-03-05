@@ -11,6 +11,7 @@ namespace DotPacket.Serialization
     public class ReflectionDeserializer : PacketDeserializer
     {
         private static readonly Des Byte = async stream => await stream.ReadByte();
+        private static readonly Des Boolean = async stream => await stream.ReadBool();
         private static readonly Des Short = async stream => await stream.ReadShort();
         private static readonly Des UShort = async stream => await stream.ReadUnsignedShort();
         private static readonly Des Int = async stream => await stream.ReadInt();
@@ -46,7 +47,7 @@ namespace DotPacket.Serialization
 
             _constructor = cons;
             
-            var fields = Type.GetFields();
+            var fields = Type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (var field in fields)
             {
                 Des des = null;
@@ -54,6 +55,7 @@ namespace DotPacket.Serialization
                 // TODO: Arrays/Lists
 
                 if (field.FieldType == typeof(byte)) des = Byte;
+                else if (field.FieldType == typeof(bool)) des = Boolean;
                 else if (field.FieldType == typeof(short)) des = Short;
                 else if (field.FieldType == typeof(ushort)) des = UShort;
                 else if (field.FieldType == typeof(int)) des = Int;

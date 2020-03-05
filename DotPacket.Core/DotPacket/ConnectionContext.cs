@@ -4,17 +4,13 @@ namespace DotPacket
     {
         public NetContext GlobalContext { get; }
         public NetworkConnection Connection { get; }
+        public int State { get; set; }
 
-        public int State
-        {
-            get => GlobalContext.State;
-            set => GlobalContext.State = value;
-        }
-
-        public ConnectionContext(NetContext globalContext, NetworkConnection connection)
+        public ConnectionContext(NetContext globalContext, NetworkConnection connection, int defaultState)
         {
             GlobalContext = globalContext;
             Connection = connection;
+            State = defaultState;
         }
     }
 }

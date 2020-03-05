@@ -7,7 +7,7 @@ namespace DotPacket
 
         public static ConnectionContext DefaultContextFactory(NetworkConnection connection, NetContext global)
         {
-            return new ConnectionContext(global, connection);
+            return new ConnectionContext(global, connection, 0);
         }
     }
 
