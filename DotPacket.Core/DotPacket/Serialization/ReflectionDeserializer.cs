@@ -84,9 +84,9 @@ namespace DotPacket.Serialization
             var stream = new StreamReader(new ByteArrayInputStream(data), DotPacket.DefaultBufferSize);
             var packet = _constructor.Invoke(new object[0]);
             
-            foreach (var (field, des) in _deserializers)
+            foreach (var entry in _deserializers)
             {
-                field.SetValue(packet, await des(stream));
+                entry.Key.SetValue(packet, await entry.Value(stream));
             }
             
             return packet;

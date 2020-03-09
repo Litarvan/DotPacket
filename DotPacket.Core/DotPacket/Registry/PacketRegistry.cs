@@ -35,9 +35,9 @@ namespace DotPacket.Registry
 
         public void SetHandler(Type packet, Handler handler)
         {
-            foreach (var (_, container) in _states)
+            foreach (var entry in _states)
             {
-                if (container.SetHandler(packet, handler))
+                if (entry.Value.SetHandler(packet, handler))
                 {
                     return;
                 }

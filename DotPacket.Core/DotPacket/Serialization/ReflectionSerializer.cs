@@ -70,9 +70,9 @@ namespace DotPacket.Serialization
             var output = new ByteArrayOutputStream();
             var stream = new StreamWriter(output, DotPacket.DefaultBufferSize);
             
-            foreach (var (field, se) in _serializers)
+            foreach (var entry in _serializers)
             {
-                await se(stream, field.GetValue(packet));
+                await entry.Value(stream, entry.Key.GetValue(packet));
             }
             
             return output.GetBytes();

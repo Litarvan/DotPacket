@@ -40,11 +40,11 @@ namespace DotPacket.Registry
 
         public bool SetHandler(Type packet, Handler handler)
         {
-            foreach (var (_, binding) in _inputPackets)
+            foreach (var entry in _inputPackets)
             {
-                if (binding.Packet == packet)
+                if (entry.Value.Packet == packet)
                 {
-                    binding.Handler = handler;
+                    entry.Value.Handler = handler;
                     return true;
                 }
             }

@@ -16,7 +16,7 @@ namespace DotPacket
         private bool _isConnected;
         
         public NetContext Context { get; }
-        public ContextFactory ContextFactory { get; }
+        public ContextFactory ContextFactory { get; set; }
         
         public SocketPacketClient(PacketRegistry registry, string host, int port, NetContext context)
         {

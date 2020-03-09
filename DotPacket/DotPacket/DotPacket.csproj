@@ -42,6 +42,7 @@
     <Compile Include="..\..\DotPacket.Core\DotPacket\IO\ByteArrayOutputStream.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\IO\IOStream.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\IO\SocketIOStream.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\IO\SocketClosedException.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\Deserializer.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\Packet.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\ReflectionSerializing.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="..\..\DotPacket.Core\DotPacket\SocketPacketServer.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\NetworkSide.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\NetworkConnection.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\ConnectionContext.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\NetContext.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\DotPacket.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\IO\StreamReader.cs" />
