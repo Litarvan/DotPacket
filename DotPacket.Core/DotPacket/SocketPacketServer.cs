@@ -65,7 +65,7 @@ namespace DotPacket
                 _socket.Listen(5);
             }
             
-            var client = await _socket.AcceptAsync();
+            var client = _socket.Accept();
             var conn = new NetworkConnection(_registry, new SocketIOStream(client), Context, ContextFactory, _bufferSize);
             
             var pos = _connections.Count;

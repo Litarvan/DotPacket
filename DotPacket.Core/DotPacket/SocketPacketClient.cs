@@ -49,7 +49,7 @@ namespace DotPacket
                 _isConnected = true;
                 
                 _registry.SetupFor(NetworkSide.Client);
-                await _socket.ConnectAsync(_endPoint);
+                _socket.Connect(_endPoint);
             }
             
             return new NetworkConnection(_registry, new SocketIOStream(_socket), Context, ContextFactory, _bufferSize);
