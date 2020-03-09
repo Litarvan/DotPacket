@@ -98,7 +98,9 @@ namespace DotPacket
                 try
                 {
                     var conn = await Accept();
+#pragma warning disable 4014
                     conn.ProcessInBackground();
+#pragma warning restore 4014
                 }
                 catch (Exception)
                 {
