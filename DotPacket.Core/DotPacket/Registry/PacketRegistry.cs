@@ -103,8 +103,16 @@ namespace DotPacket.Registry
                 {
                     container = _states[packet.State] = new PacketContainer();
                 }
-                
-                container.Register(packet.Id, packet.Bound == side ? PacketBindindSide.Input : PacketBindindSide.Output, type);
+
+                if (packet.Bound == NetworkSide.Both)
+                {
+                    container.Register(packet.Id, PacketBindindSide.Input, type);
+                    container.Register(packet.Id, PacketBindindSide.Output, type);
+                }
+                else
+                {
+                    container.Register(packet.Id, packet.Bound == side ? PacketBindindSide.Input : PacketBindindSide.Output, type);
+                }
             }
         }
 
