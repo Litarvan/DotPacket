@@ -118,11 +118,11 @@ namespace DotPacket.Registry
 
                     if (attr != null)
                     {
-                        if (pars.Length != 0 || pars[0].ParameterType != streamType)
+                        if (pars.Length == 0 || pars[0].ParameterType != streamType)
                         {
                             throw new InvalidRegistryOperationException(
-                                $"To be used as ${attrType.Name.ToLower()} of type '${packet.FullName}', " +
-                                $"method '${method.Name}' must take one ${streamType.Name} parameter"
+                                $"To be used as {attrType.Name.ToLower()} of type '{packet.FullName}', " +
+                                $"method '{method.Name}' must take one {streamType.Name} parameter"
                             );
                         }
 
