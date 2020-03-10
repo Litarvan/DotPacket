@@ -21,12 +21,20 @@ namespace DotPacket.Registry
             State = state;
         }
 
+        public UnknownPacketException(int state, Type type) : base(
+            $"An unknown packet type '{type.FullName}' was received/tried to be sent during state '{state}'"
+        )
+        {
+            State = state;
+            Type = type;
+        }
+
         public UnknownPacketException(int state) : base($"An unknown state '{state}' was given while sending a packet")
         {
             State = state;
         }
         
-        public UnknownPacketException(Type type) : base($"An unknown packet type '{type.FullName}' was trying to be sent")
+        public UnknownPacketException(Type type) : base($"An unknown packet type '{type.FullName}' was tried to be sent")
         {
             Type = type;
         }

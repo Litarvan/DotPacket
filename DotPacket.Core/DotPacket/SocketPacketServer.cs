@@ -73,6 +73,11 @@ namespace DotPacket
             
             conn.OnClose += (context, e) =>
             {
+                if (e != null)
+                {
+                    Console.Error.WriteLine(e);
+                }
+                
                 _connections.RemoveAt(pos);
 
                 if (OnConnectionClose != null)
