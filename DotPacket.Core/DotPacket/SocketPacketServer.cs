@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 
 using DotPacket.IO;
@@ -103,9 +104,13 @@ namespace DotPacket
                 try
                 {
                     var conn = await Accept();
+                    var t = new Thread(() =>
+                    {
 #pragma warning disable 4014
-                    conn.ProcessInBackground();
+                        conn.ProcessInBackground();
 #pragma warning restore 4014
+                    });
+                    t.Start();
                 }
                 catch (Exception)
                 {
