@@ -138,7 +138,14 @@ namespace DotPacket.Registry
             }
             catch (UnknownPacketException e)
             {
-                throw new UnknownPacketException(state, e.Id);
+                if (e.Type != null)
+                {
+                    throw new UnknownPacketException(state, e.Type);
+                }
+                else
+                {
+                    throw new UnknownPacketException(state, e.Id);   
+                }
             }
         }
     }
