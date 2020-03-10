@@ -43,18 +43,33 @@
     <Compile Include="..\..\DotPacket.Core\DotPacket\IO\IOStream.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\IO\SocketIOStream.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\IO\SocketClosedException.cs" />
-    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\Deserializer.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\Deserializer.cs">
+      <Link>DotPacket\Registry\Attributes\Deserializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\ExternalDeserializer.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\Packet.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\ReflectionSerializing.cs" />
-    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\Serializer.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\ExternalSerializer.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\Handler.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\Attributes\Serializer.cs">
+      <Link>DotPacket\Registry\Attributes\Serializer.cs</Link>
+    </Compile>
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\InputPacketBinding.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\InvalidRegistryOperationException.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\MethodPacketDeserializer.cs">
+      <Link>DotPacket\Registry\MethodPacketDeserializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\MethodPacketSerializer.cs">
+      <Link>DotPacket\Registry\MethodPacketSerializer.cs</Link>
+    </Compile>
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\OutputPacketBinding.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\PacketBindindSide.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\PacketContainer.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\PacketBinding.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\PacketRegistry.cs" />
+    <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\ProcessorType.cs">
+      <Link>DotPacket\Registry\ProcessorType.cs</Link>
+    </Compile>
     <Compile Include="..\..\DotPacket.Core\DotPacket\Registry\UnknownPacketException.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Serialization\PacketDeserializer.cs" />
     <Compile Include="..\..\DotPacket.Core\DotPacket\Serialization\PacketProcessor.cs" />

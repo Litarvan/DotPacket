@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
-
+using DotPacket.IO;
 using DotPacket.Registry.Attributes;
 using DotPacket.Serialization;
 
@@ -11,8 +12,6 @@ namespace DotPacket.Registry
     {
         private readonly Dictionary<uint, InputPacketBinding> _inputPackets;
         private readonly Dictionary<Type, OutputPacketBinding> _outputPackets;
-
-        // TODO: Method (de)serializers
         
         public PacketContainer()
         {
@@ -28,11 +27,11 @@ namespace DotPacket.Registry
             switch (side)
             {
                 case PacketBindindSide.Input:
-                    var deserializer = GetProcessor<PacketDeserializer>(packet, typeof(Deserializer), useReflection);
+                    var deserializer = GetProcessor<PacketDeserializer>(packet, ProcessorType.Deserializer, useReflection);
                     _inputPackets[id] = new InputPacketBinding(id, packet, deserializer);
                     break;
                 case PacketBindindSide.Output:
-                    var serializer = GetProcessor<PacketSerializer>(packet, typeof(Serializer), useReflection);
+                    var serializer = GetProcessor<PacketSerializer>(packet, ProcessorType.Serializer, useReflection);
                     _outputPackets[packet] = new OutputPacketBinding(id, packet, serializer);
                     break;
             }
@@ -73,25 +72,19 @@ namespace DotPacket.Registry
             return (binding.Id, binding.Serialize(packet));
         }
 
-        private static P GetProcessor<P>(Type packet, Type attributeType, bool useReflection)
+        private static P GetProcessor<P>(Type packet, ProcessorType processorType, bool useReflection)
             where P: PacketProcessor
         {
-            var attrs = packet.GetCustomAttributes(attributeType, true);
+            var classAttribute = processorType == ProcessorType.Serializer ? typeof(ExternalSerializer) : typeof(ExternalDeserializer);
+            var attrs = packet.GetCustomAttributes(classAttribute, true);
             var processor = useReflection
-                ? attributeType == typeof(Serializer)
+                ? processorType == ProcessorType.Serializer
                     ? (PacketProcessor) new ReflectionSerializer(packet)
                     : new ReflectionDeserializer(packet)
                 : null;
                     
             if (attrs.Length > 0)
             {
-                if (useReflection)
-                {
-                    throw new InvalidRegistryOperationException(
-                        $"Class '{packet.FullName}' has both [UseReflection] attribute and [{attributeType.Name}]"
-                    );
-                }
-
                 var desType = (Type) attrs[0];
                 if (!desType.IsSubclassOf(typeof(P)))
                 {
@@ -112,10 +105,49 @@ namespace DotPacket.Registry
             }
             else if (processor == null)
             {
-                throw new InvalidRegistryOperationException(
-                    $"Class '{packet.FullName}' has no deserializer. " +
-                    "Use attribute [UseReflection], or [Deserializer] and [Serializer]"
-                );
+                var methods = packet.GetMethods();
+                MethodInfo processorMethod = null;
+                
+                foreach (var method in methods)
+                {
+                    var attrType = processorType == ProcessorType.Serializer ? typeof(Serializer) : typeof(Deserializer);
+                    var streamType = processorType == ProcessorType.Serializer ? typeof(StreamWriter) : typeof(StreamReader);
+                    
+                    var attr = method.GetCustomAttribute(attrType);
+                    var pars = method.GetParameters();
+
+                    if (attr != null)
+                    {
+                        if (pars.Length != 0 || pars[0].ParameterType != streamType)
+                        {
+                            throw new InvalidRegistryOperationException(
+                                $"To be used as ${attrType.Name.ToLower()} of type '${packet.FullName}', " +
+                                $"method '${method.Name}' must take one ${streamType.Name} parameter"
+                            );
+                        }
+
+                        processorMethod = method;
+                    }
+                   
+                }
+
+                if (processorMethod == null)
+                {
+                    throw new InvalidRegistryOperationException(
+                        $"Class '{packet.FullName}' has no serializer or deserializer. " +
+                        "Use attribute [UseReflection], or [Serializer] and [Deserializer], " +
+                        "or [ExternalSerializer] and [ExternalDeserializer]"
+                    );
+                }
+
+                if (processorType == ProcessorType.Serializer)
+                {
+                    processor = new MethodPacketSerializer(processorMethod, packet);
+                }
+                else
+                {
+                    processor = new MethodPacketDeserializer(processorMethod, packet);
+                }
             }
 
             processor.Prepare();

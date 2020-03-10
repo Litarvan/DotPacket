@@ -2,14 +2,8 @@ using System;
 
 namespace DotPacket.Registry.Attributes
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Method)]
     public class Deserializer : Attribute
     {
-        public Type DeserializerClass { get; }
-
-        public Deserializer(Type deserializerClass)
-        {
-            DeserializerClass = deserializerClass;
-        }
     }
 }
