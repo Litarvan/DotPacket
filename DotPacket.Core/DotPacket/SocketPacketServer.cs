@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Threading.Tasks;
 
 using DotPacket.IO;
 using DotPacket.Registry;
@@ -54,7 +53,7 @@ namespace DotPacket
             ContextFactory = DotPacket.DefaultContextFactory;
         }
 
-        public async Task<NetworkConnection> Accept()
+        public NetworkConnection Accept()
         {
             if (!_isBound)
             {
@@ -90,7 +89,7 @@ namespace DotPacket
             return conn;
         }
 
-        public async Task RunInBackground()
+        public void RunInBackground()
         {
             if (_isRunning)
             {
@@ -99,25 +98,23 @@ namespace DotPacket
 
             _isRunning = true;
 
-            while (_isRunning)
+            var t = new Thread(() =>
             {
-                try
+                while (_isRunning)
                 {
-                    var conn = await Accept();
-                    var t = new Thread(() =>
+                    try
                     {
-#pragma warning disable 4014
+                        var conn = Accept();
                         conn.ProcessInBackground();
-#pragma warning restore 4014
-                    });
-                    t.Start();
-                }
-                catch (Exception)
-                {
-                    _isRunning = false;
-                    throw;
-                }
-            }
+                    }
+                    catch (Exception)
+                    {
+                        _isRunning = false;
+                        throw;
+                    }
+                } 
+            });
+            t.Start();
 
             _isRunning = false;
         }

@@ -1,6 +1,6 @@
 using System.Net;
 using System.Net.Sockets;
-using System.Threading.Tasks;
+
 using DotPacket.IO;
 using DotPacket.Registry;
 
@@ -42,7 +42,7 @@ namespace DotPacket
             ContextFactory = DotPacket.DefaultContextFactory;
         }
 
-        public async Task<NetworkConnection> Connect()
+        public NetworkConnection Connect()
         {
             if (!_isConnected)
             {

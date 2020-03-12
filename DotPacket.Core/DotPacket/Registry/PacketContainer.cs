@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Threading.Tasks;
+
 using DotPacket.IO;
 using DotPacket.Registry.Attributes;
 using DotPacket.Serialization;
@@ -51,17 +51,17 @@ namespace DotPacket.Registry
             return false;
         }
 
-        public Task Input(ConnectionContext context, byte id, byte[] data)
+        public void Input(ConnectionContext context, byte id, byte[] data)
         {
             if (!_inputPackets.ContainsKey(id))
             {
                 throw new UnknownPacketException(id);
             }
 
-            return _inputPackets[id].ReceiveAndHandle(context, data);
+            _inputPackets[id].ReceiveAndHandle(context, data);
         }
 
-        public (byte, Task<byte[]>) Output(object packet)
+        public (byte, byte[]) Output(object packet)
         {
             if (!_outputPackets.ContainsKey(packet.GetType()))
             {

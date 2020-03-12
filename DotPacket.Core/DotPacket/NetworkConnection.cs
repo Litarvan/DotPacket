@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 using DotPacket.IO;
 using DotPacket.Registry;
@@ -42,34 +41,33 @@ namespace DotPacket
             Context = contextFactory(this, globalContext);
         }
         
-        public async Task ProcessNextPacket()
+        public void ProcessNextPacket()
         {
             _readLock.WaitOne();
             
-            var id = await _in.ReadByte();
-            var size = await _in.ReadUnsignedShort();
+            var id = _in.ReadByte();
+            var size = _in.ReadUnsignedShort();
 
-            var data = await _in.ReadBytes(size);
-            await _registry.Input(Context, id, data);
+            var data = _in.ReadBytes(size);
+            _registry.Input(Context, id, data);
             
             _readLock.Set();
         }
 
-        public async Task SendPacket(object packet)
+        public void SendPacket(object packet)
         {
             _writeLock.WaitOne();
 
-            var (id, task) = _registry.Output(Context.State, packet);
-            await _out.WriteByte(id);
-
-            var data = await task;
-            await _out.WriteUnsignedShort((ushort) data.Length);
-            await _out.WriteBytes(data);
+            var (id, data) = _registry.Output(Context.State, packet);
+            
+            _out.WriteByte(id);
+            _out.WriteUnsignedShort((ushort) data.Length);
+            _out.WriteBytes(data);
             
             _writeLock.Set();
         }
 
-        public async Task ProcessInBackground()
+        public void ProcessInBackground()
         {
             if (_isRunning)
             {
@@ -78,22 +76,26 @@ namespace DotPacket
             
             _isRunning = true;
             
-            while (_isRunning)
+            var t = new Thread(() =>
             {
-                try
+                while (_isRunning)
                 {
-                    await ProcessNextPacket();
-                }
-                catch (Exception e)
-                {
-                    if (OnClose != null)
+                    try
                     {
-                        OnClose(Context, e is SocketClosedException ? null : e);
+                        ProcessNextPacket();
                     }
+                    catch (Exception e)
+                    {
+                        if (OnClose != null)
+                        {
+                            OnClose(Context, e is SocketClosedException ? null : e);
+                        }
                     
-                    break;
+                        break;
+                    }
                 }
-            }
+            });
+            t.Start();
             
             _isRunning = false;
         }

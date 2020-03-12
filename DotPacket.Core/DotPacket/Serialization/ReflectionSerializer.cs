@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Threading.Tasks;
+
 using DotPacket.IO;
 using DotPacket.Registry;
 
@@ -65,19 +65,19 @@ namespace DotPacket.Serialization
             }
         }
 
-        public override async Task<byte[]> Serialize(object packet)
+        public override byte[] Serialize(object packet)
         {
             var output = new ByteArrayOutputStream();
             var stream = new StreamWriter(output, DotPacket.DefaultBufferSize);
             
             foreach (var entry in _serializers)
             {
-                await entry.Value(stream, entry.Key.GetValue(packet));
+                entry.Value(stream, entry.Key.GetValue(packet));
             }
             
             return output.GetBytes();
         }
     }
     
-    internal delegate Task Se(StreamWriter stream, object obj);
+    internal delegate void Se(StreamWriter stream, object obj);
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 using DotPacket.Registry.Attributes;
 
@@ -74,13 +73,9 @@ namespace DotPacket.Registry
                     );
                 }
                 
-                SetHandler(packet, async (context, o) =>
+                SetHandler(packet, (context, o) =>
                 {
-                    var result = method.Invoke(cl, new[] {context, o});
-                    if (result is Task task)
-                    {
-                        await task;
-                    }
+                    method.Invoke(cl, new[] {context, o});
                 });
             }
         }
@@ -116,7 +111,7 @@ namespace DotPacket.Registry
             }
         }
 
-        public Task Input(ConnectionContext context, byte id, byte[] data)
+        public void Input(ConnectionContext context, byte id, byte[] data)
         {
             if (!_states.ContainsKey(context.State))
             {
@@ -125,7 +120,7 @@ namespace DotPacket.Registry
 
             try
             {
-                return _states[context.State].Input(context, id, data);
+                _states[context.State].Input(context, id, data);
             }
             catch (UnknownPacketException e)
             {
@@ -133,7 +128,7 @@ namespace DotPacket.Registry
             }
         }
 
-        public (byte, Task<byte[]>) Output(int state, object packet)
+        public (byte, byte[]) Output(int state, object packet)
         {
             if (!_states.ContainsKey(state))
             {
@@ -150,10 +145,8 @@ namespace DotPacket.Registry
                 {
                     throw new UnknownPacketException(state, e.Type);
                 }
-                else
-                {
-                    throw new UnknownPacketException(state, e.Id);   
-                }
+
+                throw new UnknownPacketException(state, e.Id);
             }
         }
     }

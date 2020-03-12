@@ -1,6 +1,6 @@
 using System;
 using System.Reflection;
-using System.Threading.Tasks;
+
 using DotPacket.IO;
 using DotPacket.Serialization;
 
@@ -34,18 +34,13 @@ namespace DotPacket.Registry
             }
         }
 
-        public override async Task<object> Deserialize(byte[] data)
+        public override object Deserialize(byte[] data)
         {
             var packet = _constructor.Invoke(new object[0]);
-            
             var stream = new StreamReader(new ByteArrayInputStream(data), DotPacket.DefaultBufferSize);
-            var result = _method.Invoke(packet, new object[] {stream});
-
-            if (result is Task task)
-            {
-                await task;
-            }
-
+            
+            _method.Invoke(packet, new object[] {stream});
+            
             return packet;
         }
     }

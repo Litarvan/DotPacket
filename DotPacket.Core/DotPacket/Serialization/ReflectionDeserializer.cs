@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Threading.Tasks;
 
 using DotPacket.IO;
 using DotPacket.Registry;
@@ -10,18 +9,18 @@ namespace DotPacket.Serialization
 {
     public class ReflectionDeserializer : PacketDeserializer
     {
-        private static readonly Des Byte = async stream => await stream.ReadByte();
-        private static readonly Des Boolean = async stream => await stream.ReadBool();
-        private static readonly Des Short = async stream => await stream.ReadShort();
-        private static readonly Des UShort = async stream => await stream.ReadUnsignedShort();
-        private static readonly Des Int = async stream => await stream.ReadInt();
-        private static readonly Des UInt = async stream => await stream.ReadUnsignedInt();
-        private static readonly Des Long = async stream => await stream.ReadLong();
-        private static readonly Des ULong = async stream => await stream.ReadUnsignedLong();
-        private static readonly Des Float = async stream => await stream.ReadFloat();
-        private static readonly Des Double = async stream => await stream.ReadDouble();
-        private static readonly Des Char = async stream => await stream.ReadChar();
-        private static readonly Des String = async stream => await stream.ReadString();
+        private static readonly Des Byte = stream => stream.ReadByte();
+        private static readonly Des Boolean = stream => stream.ReadBool();
+        private static readonly Des Short = stream => stream.ReadShort();
+        private static readonly Des UShort = stream => stream.ReadUnsignedShort();
+        private static readonly Des Int = stream => stream.ReadInt();
+        private static readonly Des UInt = stream => stream.ReadUnsignedInt();
+        private static readonly Des Long = stream => stream.ReadLong();
+        private static readonly Des ULong = stream => stream.ReadUnsignedLong();
+        private static readonly Des Float = stream => stream.ReadFloat();
+        private static readonly Des Double = stream => stream.ReadDouble();
+        private static readonly Des Char = stream => stream.ReadChar();
+        private static readonly Des String = stream => stream.ReadString();
 
         private ConstructorInfo _constructor;
         private readonly Dictionary<FieldInfo, Des> _deserializers;
@@ -79,19 +78,19 @@ namespace DotPacket.Serialization
             }
         }
 
-        public override async Task<object> Deserialize(byte[] data)
+        public override object Deserialize(byte[] data)
         {
             var stream = new StreamReader(new ByteArrayInputStream(data), DotPacket.DefaultBufferSize);
             var packet = _constructor.Invoke(new object[0]);
             
             foreach (var entry in _deserializers)
             {
-                entry.Key.SetValue(packet, await entry.Value(stream));
+                entry.Key.SetValue(packet, entry.Value(stream));
             }
             
             return packet;
         }
     }
 
-    internal delegate Task<object> Des(StreamReader stream);
+    internal delegate object Des(StreamReader stream);
 }

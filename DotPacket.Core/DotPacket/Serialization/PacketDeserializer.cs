@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 
 namespace DotPacket.Serialization
 {
@@ -9,6 +8,6 @@ namespace DotPacket.Serialization
         {
         }
 
-        public abstract Task<object> Deserialize(byte[] data);
+        public abstract object Deserialize(byte[] data);
     }
 }

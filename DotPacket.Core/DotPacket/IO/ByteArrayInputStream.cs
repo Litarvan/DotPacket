@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 
 namespace DotPacket.IO
 {
@@ -7,6 +6,7 @@ namespace DotPacket.IO
     {
         private readonly byte[] _bytes;
         private uint _cursor;
+        
         // TODO: Utiliser Array.Copy ?
 
         public ByteArrayInputStream(byte[] bytes)
@@ -14,7 +14,7 @@ namespace DotPacket.IO
             _bytes = bytes;
         }
 
-        public Task<uint> ReadBytes(byte[] bytes, uint offset, uint count)
+        public uint ReadBytes(byte[] bytes, uint offset, uint count)
         {
             var toRead = Math.Min((uint) bytes.Length - offset, count);
             
@@ -25,12 +25,12 @@ namespace DotPacket.IO
             
             _cursor += toRead;
 
-            return Task.FromResult(toRead);
+            return toRead;
         }
 
-        public Task<uint> WriteBytes(byte[] bytes, uint offset, uint count)
+        public uint WriteBytes(byte[] bytes, uint offset, uint count)
         {
-            return Task.FromResult((uint) 0);
+            return 0;
         }
 
         public void Close()

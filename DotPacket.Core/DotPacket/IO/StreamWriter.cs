@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 
 namespace DotPacket.IO
 {
@@ -14,78 +13,78 @@ namespace DotPacket.IO
             _bufferSize = bufferSize;
         }
         
-        public async Task WriteBytes(byte[] bytes)
+        public void WriteBytes(byte[] bytes)
         {
             uint counter = 0;
             
             while (counter < bytes.Length)
             {
-                counter += await _stream.WriteBytes(bytes, counter, Math.Min((uint) bytes.Length - counter, _bufferSize));
+                counter += _stream.WriteBytes(bytes, counter, Math.Min((uint) bytes.Length - counter, _bufferSize));
             }
         }
 
-        public Task WriteByte(byte b)
+        public void WriteByte(byte b)
         {
-            return WriteBytes(new [] {b});
+            WriteBytes(new [] {b});
         }
 
-        public Task WriteBool(bool b)
+        public void WriteBool(bool b)
         {
-            return WriteByte(b ? (byte) 1 : (byte) 0);
+            WriteByte(b ? (byte) 1 : (byte) 0);
         }
 
-        public Task WriteShort(short s)
+        public void WriteShort(short s)
         {
-            return WriteBytes(BitConverter.GetBytes(s));
+            WriteBytes(BitConverter.GetBytes(s));
         }
 
-        public Task WriteUnsignedShort(ushort s)
+        public void WriteUnsignedShort(ushort s)
         {
-            return WriteBytes(BitConverter.GetBytes(s));
+            WriteBytes(BitConverter.GetBytes(s));
         }
 
-        public Task WriteInt(int i)
+        public void WriteInt(int i)
         {
-            return WriteBytes(BitConverter.GetBytes(i));
+            WriteBytes(BitConverter.GetBytes(i));
         }
 
-        public Task WriteUnsignedInt(uint i)
+        public void WriteUnsignedInt(uint i)
         {
-            return WriteBytes(BitConverter.GetBytes(i));
+            WriteBytes(BitConverter.GetBytes(i));
         }
 
-        public Task WriteLong(long l)
+        public void WriteLong(long l)
         {
-            return WriteBytes(BitConverter.GetBytes(l));
+            WriteBytes(BitConverter.GetBytes(l));
         }
 
-        public Task WriteUnsignedLong(ulong l)
+        public void WriteUnsignedLong(ulong l)
         {
-            return WriteBytes(BitConverter.GetBytes(l));
+            WriteBytes(BitConverter.GetBytes(l));
         }
 
-        public Task WriteFloat(float f)
+        public void WriteFloat(float f)
         {
-            return WriteBytes(BitConverter.GetBytes(f));
+            WriteBytes(BitConverter.GetBytes(f));
         }
 
-        public Task WriteDouble(double d)
+        public void WriteDouble(double d)
         {
-            return WriteBytes(BitConverter.GetBytes(d));
+            WriteBytes(BitConverter.GetBytes(d));
         }
 
-        public Task WriteChar(char c)
+        public void WriteChar(char c)
         {
-            return WriteBytes(BitConverter.GetBytes(c));
+            WriteBytes(BitConverter.GetBytes(c));
         }
 
-        public async Task WriteString(string str)
+        public void WriteString(string str)
         {
-            await WriteUnsignedShort((ushort) str.Length);
+            WriteUnsignedShort((ushort) str.Length);
             
             foreach (var c in str)
-            {
-                await WriteChar(c);
+            { 
+                WriteChar(c);
             }
         }
     }

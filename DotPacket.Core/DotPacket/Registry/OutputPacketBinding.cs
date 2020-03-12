@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 
 using DotPacket.Serialization;
 
@@ -14,7 +13,7 @@ namespace DotPacket.Registry
             Serializer = serializer;
         }
 
-        public Task<byte[]> Serialize(object packet)
+        public byte[] Serialize(object packet)
         {
             return Serializer.Serialize(packet);
         }

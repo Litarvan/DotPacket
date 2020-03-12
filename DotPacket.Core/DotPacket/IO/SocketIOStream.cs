@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
-using System.Threading.Tasks;
 
 namespace DotPacket.IO
 {
@@ -14,7 +13,7 @@ namespace DotPacket.IO
             _socket = socket;
         }
 
-        public async Task<uint> ReadBytes(byte[] bytes, uint offset, uint count)
+        public uint ReadBytes(byte[] bytes, uint offset, uint count)
         {
             var segment = new ArraySegment<byte>(bytes, (int) offset, (int) count);
             int read = _socket.Receive(new List<ArraySegment<byte>>(new []{segment}), SocketFlags.None);
@@ -27,7 +26,7 @@ namespace DotPacket.IO
             return (uint) Math.Max(0, read);
         }
 
-        public async Task<uint> WriteBytes(byte[] bytes, uint offset, uint count)
+        public uint WriteBytes(byte[] bytes, uint offset, uint count)
         {
             var segment = new ArraySegment<byte>(bytes, (int) offset, (int) count);
             int written = _socket.Send(new List<ArraySegment<byte>>(new []{segment}), SocketFlags.None);

@@ -1,6 +1,6 @@
 using System;
 using System.Reflection;
-using System.Threading.Tasks;
+
 using DotPacket.IO;
 using DotPacket.Serialization;
 
@@ -15,16 +15,12 @@ namespace DotPacket.Registry
             _method = method;
         }
 
-        public override async Task<byte[]> Serialize(object packet)
+        public override byte[] Serialize(object packet)
         {
             var stream = new ByteArrayOutputStream();
             var writer = new StreamWriter(stream, DotPacket.DefaultBufferSize);
 
-            var result = _method.Invoke(packet, new object[] {writer});
-            if (result is Task task)
-            {
-                await task;
-            }
+            _method.Invoke(packet, new object[] {writer});
 
             return stream.GetBytes();
         }

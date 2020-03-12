@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 
 namespace DotPacket.IO
 {
@@ -14,82 +13,82 @@ namespace DotPacket.IO
             _bufferSize = bufferSize;
         }
 
-        public async Task<byte[]> ReadBytes(uint count)
+        public byte[] ReadBytes(uint count)
         {
             uint counter = 0;
             var result = new byte[count];
             
             while (counter < count)
             {
-                counter += await _stream.ReadBytes(result, counter, Math.Min(count - counter, _bufferSize));
+                counter += _stream.ReadBytes(result, counter, Math.Min(count - counter, _bufferSize));
             }
 
             return result;
         }
 
-        public async Task<byte> ReadByte()
+        public byte ReadByte()
         {
-            return (await ReadBytes(1))[0];
+            return ReadBytes(1)[0];
         }
 
-        public async Task<bool> ReadBool()
+        public bool ReadBool()
         {
-            return (await ReadByte()) == 1;
+            return ReadByte() == 1;
         }
 
-        public async Task<short> ReadShort()
+        public short ReadShort()
         {
-            return BitConverter.ToInt16(await ReadBytes(2), 0);
+            return BitConverter.ToInt16(ReadBytes(2), 0);
         }
 
-        public async Task<ushort> ReadUnsignedShort()
+        public ushort ReadUnsignedShort()
         {
-            return BitConverter.ToUInt16(await ReadBytes(2), 0);
+            return BitConverter.ToUInt16(ReadBytes(2), 0);
         }
 
-        public async Task<int> ReadInt()
+        public int ReadInt()
         {
-            return BitConverter.ToInt32(await ReadBytes(4), 0);
+            return BitConverter.ToInt32(ReadBytes(4), 0);
         }
 
-        public async Task<uint> ReadUnsignedInt()
+        public uint ReadUnsignedInt()
         {
-            return BitConverter.ToUInt32(await ReadBytes(4), 0);
+            return BitConverter.ToUInt32(ReadBytes(4), 0);
         }
 
-        public async Task<long> ReadLong()
+        public long ReadLong()
         {
-            return BitConverter.ToInt64(await ReadBytes(8), 0);
+            return BitConverter.ToInt64(ReadBytes(8), 0);
         }
 
-        public async Task<ulong> ReadUnsignedLong()
+        public ulong ReadUnsignedLong()
         {
-            return BitConverter.ToUInt64(await ReadBytes(8), 0);
+            return BitConverter.ToUInt64(ReadBytes(8), 0);
         }
 
-        public async Task<float> ReadFloat()
+        public float ReadFloat()
         {
-            return BitConverter.ToSingle(await ReadBytes(4), 0);
+            return BitConverter.ToSingle(ReadBytes(4), 0);
         }
 
-        public async Task<double> ReadDouble()
+        public double ReadDouble()
         {
-            return BitConverter.ToDouble(await ReadBytes(8), 0);
+            return BitConverter.ToDouble(ReadBytes(8), 0);
         }
 
-        public async Task<char> ReadChar()
+        public char ReadChar()
         {
-            return BitConverter.ToChar(await ReadBytes(2), 0);
+            return BitConverter.ToChar(ReadBytes(2), 0);
         }
 
-        public async Task<string> ReadString()
+        public string ReadString()
         {
-            var size = await ReadUnsignedShort();
+            var size = ReadUnsignedShort();
             var result = "";
             
             for (var i = 0; i < size; i++)
             {
-                result += await ReadChar();
+                result += ReadChar();
             }
 
             return result;

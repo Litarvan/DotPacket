@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 
 using DotPacket.Serialization;
 
@@ -15,14 +14,14 @@ namespace DotPacket.Registry
             Deserializer = deserializer;
         }
 
-        public async Task ReceiveAndHandle(ConnectionContext context, byte[] data)
+        public void ReceiveAndHandle(ConnectionContext context, byte[] data)
         {
             if (Handler != null)
             {
-                await Handler(context, await Deserializer.Deserialize(data));
+                Handler(context, Deserializer.Deserialize(data));
             }
         }
     }
     
-    public delegate Task Handler(ConnectionContext context, object packet);
+    public delegate void Handler(ConnectionContext context, object packet);
 }
