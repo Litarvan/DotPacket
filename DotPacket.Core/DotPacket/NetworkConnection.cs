@@ -94,10 +94,10 @@ namespace DotPacket
                         break;
                     }
                 }
+            
+                _isRunning = false;
             });
             t.Start();
-            
-            _isRunning = false;
         }
 
         public void Close()
