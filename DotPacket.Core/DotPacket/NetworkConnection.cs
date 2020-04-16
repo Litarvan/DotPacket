@@ -58,11 +58,16 @@ namespace DotPacket
         {
             _writeLock.WaitOne();
 
+            var result = new ByteArrayOutputStream();
+            var output = new StreamWriter(result, DotPacket.DefaultBufferSize);
+            
             var (id, data) = _registry.Output(Context.State, packet);
             
-            _out.WriteByte(id);
-            _out.WriteUnsignedShort((ushort) data.Length);
-            _out.WriteBytes(data);
+            output.WriteByte(id);
+            output.WriteUnsignedShort((ushort) data.Length);
+            output.WriteBytes(data);
+            
+            _out.WriteBytes(result.GetBytes());
             
             _writeLock.Set();
         }
