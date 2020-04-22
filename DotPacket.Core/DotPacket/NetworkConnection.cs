@@ -78,8 +78,16 @@ namespace DotPacket
             output.WriteByte(id);
             output.WriteUnsignedShort((ushort) data.Length);
             output.WriteBytes(data);
-            
-            to.WriteBytes(result.GetBytes());
+
+            try
+            {
+                to.WriteBytes(result.GetBytes());
+            }
+            catch (Exception e)
+            {
+                Close(e);
+                throw;
+            }
             
             _writeLock.Set();
         }
@@ -105,7 +113,15 @@ namespace DotPacket
                 SendPacket(packet, output);
             }
             
-            _out.WriteBytes(result.GetBytes());
+            try
+            {
+                _out.WriteBytes(result.GetBytes());
+            }
+            catch (Exception e)
+            {
+                Close(e);
+                throw;
+            }
 
             _packetQueue = new List<object>();
             
@@ -131,11 +147,7 @@ namespace DotPacket
                     }
                     catch (Exception e)
                     {
-                        if (OnClose != null)
-                        {
-                            OnClose(Context, e is SocketClosedException ? null : e);
-                        }
-                    
+                        Close(e);
                         break;
                     }
                 }
@@ -147,11 +159,16 @@ namespace DotPacket
 
         public void Close()
         {
+            Close(null);
+        }
+
+        protected void Close(Exception e)
+        {
             _isRunning = false;
             
             if (OnClose != null)
             {
-                OnClose(Context, null);
+                OnClose(Context, e is SocketClosedException ? null : e);
             }
         }
     }
