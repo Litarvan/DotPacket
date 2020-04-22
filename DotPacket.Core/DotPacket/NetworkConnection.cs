@@ -19,7 +19,7 @@ namespace DotPacket
         private readonly ManualResetEvent _writeLock;
         private readonly ManualResetEvent _queueLock;
 
-        private readonly List<object> _packetQueue;
+        private List<object> _packetQueue;
 
         private bool _isRunning;
 
@@ -106,6 +106,8 @@ namespace DotPacket
             }
             
             _out.WriteBytes(result.GetBytes());
+
+            _packetQueue = new List<object>();
             
             _queueLock.Set();
         }
