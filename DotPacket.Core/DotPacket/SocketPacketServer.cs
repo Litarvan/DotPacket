@@ -68,7 +68,6 @@ namespace DotPacket
             var client = _socket.Accept();
             var conn = new NetworkConnection(_registry, new SocketIOStream(client), Context, ContextFactory, _bufferSize);
             
-            var pos = _connections.Count;
             _connections.Add(conn);
             
             conn.OnClose += (context, e) =>
@@ -78,7 +77,7 @@ namespace DotPacket
                     Console.Error.WriteLine(e);
                 }
                 
-                _connections.RemoveAt(pos);
+                _connections.Remove(conn);
 
                 if (OnConnectionClose != null)
                 {

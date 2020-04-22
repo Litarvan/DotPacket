@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 using DotPacket.IO;
@@ -16,6 +17,9 @@ namespace DotPacket
 
         private readonly ManualResetEvent _readLock;
         private readonly ManualResetEvent _writeLock;
+        private readonly ManualResetEvent _queueLock;
+
+        private readonly List<object> _packetQueue;
 
         private bool _isRunning;
 
@@ -37,6 +41,9 @@ namespace DotPacket
 
             _readLock = new ManualResetEvent(true);
             _writeLock = new ManualResetEvent(true);
+            _queueLock = new ManualResetEvent(true);
+            
+            _packetQueue = new List<object>();
             
             Context = contextFactory(this, globalContext);
         }
@@ -56,6 +63,11 @@ namespace DotPacket
 
         public void SendPacket(object packet)
         {
+            SendPacket(packet, _out);
+        }
+
+        protected void SendPacket(object packet, StreamWriter to)
+        {
             _writeLock.WaitOne();
 
             var result = new ByteArrayOutputStream();
@@ -67,9 +79,35 @@ namespace DotPacket
             output.WriteUnsignedShort((ushort) data.Length);
             output.WriteBytes(data);
             
-            _out.WriteBytes(result.GetBytes());
+            to.WriteBytes(result.GetBytes());
             
             _writeLock.Set();
+        }
+
+        public void AddToSendQueue(object packet)
+        {
+            _queueLock.WaitOne();
+
+            _packetQueue.Add(packet);
+            
+            _queueLock.Set();
+        }
+
+        public void SendQueue()
+        {
+            _queueLock.WaitOne();
+
+            var result = new ByteArrayOutputStream();
+            var output = new StreamWriter(result, DotPacket.DefaultBufferSize);
+            
+            foreach (var packet in _packetQueue)
+            {
+                SendPacket(packet, output);
+            }
+            
+            _out.WriteBytes(result.GetBytes());
+            
+            _queueLock.Set();
         }
 
         public void ProcessInBackground()
